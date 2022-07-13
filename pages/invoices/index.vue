@@ -56,6 +56,7 @@ export default {
     }
   },
   mounted () {
+    this.forceCleanCheck()
     dbLocal.getLatestValue()
     this.resetFilter()
   },
@@ -83,6 +84,12 @@ export default {
     },
     resetFilter () {
       this.invoices = this.mapInvoices(dbLocal.currentValue)
+    },
+    forceCleanCheck () {
+      const isForceClean = this.$route.query?.reset === '1'
+      if (isForceClean) {
+        dbLocal.forceClean()
+      }
     }
   }
 }

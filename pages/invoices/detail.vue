@@ -18,7 +18,7 @@
           <div class="c__btn bg-red-700 hover:bg-red-800">
             <span class="text-sm font-semibold">Delete</span>
           </div>
-          <div class="c__btn bg-primary-500 hover:bg-primary-600">
+          <div v-show="invoice?.status == 'pending'" @click="setAsPaid()" class="c__btn bg-primary-500 hover:bg-primary-600">
             <span class="text-sm font-semibold">Mark as Paid</span>
           </div>
         </div>
@@ -159,6 +159,17 @@ export default {
       }
 
       return bg + ' ' + color
+    },
+    setAsPaid () {
+      const confirmation = confirm('Are you sure you want to mark this invoice as paid?')
+      if (confirmation) {
+        this.invoice.status = 'paid'
+        // Prevent observer saved on localstorage
+        const cleanInvoice = JSON.parse(JSON.stringify(this.invoice))
+        dbLocal.updateById(cleanInvoice.id, cleanInvoice)
+        alert('Invoice marked as paid')
+        this.$router.push({ path: '/invoices' })
+      }
     }
   }
 }

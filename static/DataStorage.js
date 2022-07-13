@@ -17,6 +17,10 @@ class DataStorage {
     this.currentValue = storageValue
   }
 
+  forceClean () {
+    localStorage.removeItem(this.storageKey)
+  }
+
   commitLatestValue (latestValue) {
     this.currentValue = latestValue
     localStorage.setItem(this.storageKey, JSON.stringify(latestValue))
