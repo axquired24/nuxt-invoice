@@ -1,5 +1,8 @@
 <template>
-  <div class="grid grid-cols-12 p-4 pl-8 my-4 bg-primary-800 rounded-md items-center text-sm cursor-pointer hover:opacity-80">
+  <div
+    @click="$router.push({path: '/invoices/detail', query: {id: inv.id}})"
+    class="grid grid-cols-12 p-4 pl-8 my-4 bg-primary-800 rounded-md items-center text-sm cursor-pointer hover:opacity-80"
+  >
     <div class="col-span-2 uppercase font-semibold">
       <span class="opacity-70">#</span>{{ inv.id }}
     </div>
@@ -27,7 +30,7 @@ export default {
   data: () => {
     return {
       totalBill: 0,
-      statusClass: { bg: null, color: null }
+      statusClass: null
     }
   },
   created () {

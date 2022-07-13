@@ -24,7 +24,7 @@
           </select>
         </div>
         <div class="col-span-1">
-          <div class="bg-primary-500 hover:bg-primary-600 py-1 px-2 rounded-full flex items-center gap-4 cursor-pointer">
+          <div class="c__btn bg-primary-500 hover:bg-primary-600 flex items-center gap-4">
             <IconPlusCircleSvg class="text-white h-10" />
             <span class="text-sm font-bold">New Invoice</span>
           </div>
@@ -42,10 +42,9 @@
 </template>
 
 <script>
-import getInvoices from '~/static/InvoiceData'
 import DataStorage from '~/static/DataStorage'
-
 const dbLocal = new DataStorage()
+
 export default {
   layout: 'purple-one',
   data () {
@@ -88,3 +87,9 @@ export default {
   }
 }
 </script>
+
+<style lang="postcss" scoped>
+.c__btn {
+  @apply py-1 px-2 rounded-full cursor-pointer
+}
+</style>
