@@ -1,6 +1,6 @@
 <!-- eslint-disable vue/multi-word-component-names -->
 <template>
-  <div class="wrapper bg-purple-900 min-h-screen">
+  <div class="wrapper bg-primary-900 text-cgrey-a min-h-screen">
     <div class="flex justify-center items-start pt-10">
       <div class="w-1/2">
         <div class="grid grid-cols-4 items-end">
@@ -39,7 +39,20 @@ export default {
     }
   },
   mounted () {
-    this.invoices = getInvoices()
+    this.invoices = this.mapInvoices(getInvoices())
+  },
+  methods: {
+    mapInvoices (invoices) {
+      const self = this
+      return invoices.map((inv) => {
+        const dueDate = self.$moment(inv.date, 'YYYY-MM-DD').add(inv.dayTerms, 'days')
+        inv.dueDate = dueDate.format('DD MMM YYYY')
+        inv.dueDateTs = dueDate.unix()
+        return inv
+      }).sort((a, b) => {
+        return a.dueDateTs - b.dueDateTs
+      })
+    }
   }
 }
 </script>
