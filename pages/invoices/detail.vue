@@ -5,7 +5,7 @@
       <div class="grid grid-cols-4 items-end">
         <div class="col-span-2 flex gap-2">
           <NuxtLink to="/invoices">
-            <IconChevronRightSvg class="text-primary-800 hover:text-cgrey-a h-10 cursor-pointer transform rotate-180" />
+            <IconChevronRightSvg class="text-gray-300 hover:text-white h-10 cursor-pointer transform rotate-180" />
           </NuxtLink>
           <div class="text-3xl font-bold">
             Invoice <span class="opacity-70">#</span><span class="uppercase">{{ invoice?.id }}</span>
@@ -15,7 +15,7 @@
           <div class="c__btn bg-transparent text-cgrey-a hover:text-gray-400">
             <span class="text-sm font-semibold">Edit</span>
           </div>
-          <div class="c__btn bg-red-700 hover:bg-red-800">
+          <div @click="deleteInvoice()" class="c__btn bg-red-700 hover:bg-red-800">
             <span class="text-sm font-semibold">Delete</span>
           </div>
           <div v-show="invoice?.status == 'pending'" @click="setAsPaid()" class="c__btn bg-primary-500 hover:bg-primary-600">
@@ -168,6 +168,14 @@ export default {
         const cleanInvoice = JSON.parse(JSON.stringify(this.invoice))
         dbLocal.updateById(cleanInvoice.id, cleanInvoice)
         alert('Invoice marked as paid')
+        this.$router.push({ path: '/invoices' })
+      }
+    },
+    deleteInvoice () {
+      const confirmation = confirm('Are you sure you want to delete this invoice?')
+      if (confirmation) {
+        dbLocal.removeById(this.invoice.id)
+        alert('Invoice deleted')
         this.$router.push({ path: '/invoices' })
       }
     }
