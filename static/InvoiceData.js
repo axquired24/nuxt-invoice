@@ -36,7 +36,7 @@ const generateInvoice = (id, name, createdDate = '2020-01-01', status = 'pending
     dayTerms: 30,
     projectDescription: 'Graphic Design for ' + name,
     items: generateInvoiceItems(),
-    status: 'paid'
+    status
   }
 }
 
