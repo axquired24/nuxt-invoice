@@ -43,17 +43,21 @@
 
 <script>
 import getInvoices from '~/static/InvoiceData'
+import DataStorage from '~/static/DataStorage'
 
+const dbLocal = new DataStorage()
 export default {
   layout: 'purple-one',
   data () {
     return {
       invoices: [],
       statusList: ['draft', 'pending', 'paid'],
-      statusFilter: 0
+      statusFilter: 0,
+      showForm: false
     }
   },
   mounted () {
+    dbLocal.getLatestValue()
     this.resetFilter()
   },
   methods: {
@@ -70,7 +74,7 @@ export default {
     },
     filterByStatus (status) {
       if (this.statusList.includes(status)) {
-        const invoiceAll = this.mapInvoices(getInvoices())
+        const invoiceAll = this.mapInvoices(dbLocal.currentValue)
         this.invoices = invoiceAll.filter((inv) => {
           return inv.status === status
         })
@@ -79,7 +83,7 @@ export default {
       }
     },
     resetFilter () {
-      this.invoices = this.mapInvoices(getInvoices())
+      this.invoices = this.mapInvoices(dbLocal.currentValue)
     }
   }
 }
