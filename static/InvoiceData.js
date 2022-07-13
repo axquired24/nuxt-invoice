@@ -2,13 +2,13 @@ const generateInvoiceItems = () => {
   const items = [
     {
       name: 'Banner Design',
-      price: Math.floor(Math.random() * 101),
-      qty: 1
+      price: 358.12,
+      qty: Math.floor(Math.random() * 11)
     },
     {
       name: 'Brochure Design',
-      price: Math.floor(Math.random() * 101),
-      qty: 2
+      price: 28.17,
+      qty: Math.floor(Math.random() * 11)
     }
   ]
 

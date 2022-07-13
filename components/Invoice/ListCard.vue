@@ -1,12 +1,12 @@
 <template>
-  <div class="grid grid-cols-5 gap-4 p-4 pl-8 my-4 bg-primary-800 rounded-md items-center text-sm cursor-pointer hover:opacity-80">
-    <div class="uppercase font-semibold">
+  <div class="grid grid-cols-12 p-4 pl-8 my-4 bg-primary-800 rounded-md items-center text-sm cursor-pointer hover:opacity-80">
+    <div class="col-span-2 uppercase font-semibold">
       <span class="opacity-70">#</span>{{ inv.id }}
     </div>
-    <div>Due {{ inv.dueDate }}</div>
-    <div>{{ inv.to.name }}</div>
-    <div class="col-span-2 flex justify-end items-center">
-      <div class="text-lg text-white font-bold mr-8">￡ {{ totalBill }}</div>
+    <div class="col-span-3">Due {{ inv.dueDate }}</div>
+    <div class="col-span-2">{{ inv.to.name }}</div>
+    <div class="col-span-5 flex justify-end items-center">
+      <div class="text-lg text-white font-semibold mr-8">￡ {{ totalBill }}</div>
       <div
         :class="statusClass"
         class="capitalize px-4 py-2 mr-4 flex justify-center gap-2 items-center rounded-md w-24"
@@ -20,6 +20,7 @@
 </template>
 
 <script>
+const numeral = require('numeral')
 export default {
   // eslint-disable-next-line vue/require-prop-types
   props: ['inv'],
@@ -30,7 +31,7 @@ export default {
     }
   },
   created () {
-    this.totalBill = this.getTotalBill()
+    this.totalBill = numeral(this.getTotalBill()).format('0,0.00')
     this.statusClass = this.getStatusClass()
   },
   methods: {
@@ -39,7 +40,7 @@ export default {
       this.inv.items.forEach((item) => {
         total += item.price * item.qty
       })
-      return total
+      return Math.round(total * 100) / 100
     },
     getStatusClass () {
       let bg = null

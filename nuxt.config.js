@@ -31,7 +31,8 @@ export default {
   buildModules: [
     // https://go.nuxtjs.dev/eslint
     // '@nuxtjs/eslint-module',
-    '@nuxtjs/moment'
+    '@nuxtjs/moment',
+    '@nuxtjs/color-mode'
   ],
 
   // Modules: https://go.nuxtjs.dev/config-modules
@@ -48,6 +49,9 @@ export default {
   },
   moment: {
     defaultTimezone: 'Asia/Jakarta'
+  },
+  colorMode: {
+    classSuffix: ''
   },
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
