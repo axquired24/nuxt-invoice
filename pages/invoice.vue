@@ -11,10 +11,24 @@
             <span>There are total {{ invoices.length }} Invoices</span>
           </div>
           <div class="col-span-1">
-            Filter By Status
+            <select
+              v-model="statusFilter"
+              @change="filterByStatus(statusFilter)"
+              class="cursor-pointer capitalize bg-transparent px-2 py-3 font-semibold">
+              <option value="0" disabled>Filter by status</option>
+              <option value="all">All</option>
+              <template v-for="(st, stIdx) in statusList">
+                <option :key="stIdx" :value="st">
+                  {{ st }}
+                </option>
+              </template>
+            </select>
           </div>
           <div class="col-span-1">
-            New Invoice
+            <div class="bg-primary-500 hover:bg-primary-600 py-1 px-2 rounded-full flex items-center gap-4 cursor-pointer">
+              <IconPlusCircleSvg class="text-white h-10" />
+              <span class="text-sm font-bold">New Invoice</span>
+            </div>
           </div>
         </div>
         <div class="invoice-list mt-10">
@@ -35,11 +49,13 @@ import getInvoices from '~/static/InvoiceData'
 export default {
   data () {
     return {
-      invoices: []
+      invoices: [],
+      statusList: ['draft', 'pending', 'paid'],
+      statusFilter: 0
     }
   },
   mounted () {
-    this.invoices = this.mapInvoices(getInvoices())
+    this.resetFilter()
   },
   methods: {
     mapInvoices (invoices) {
@@ -52,6 +68,19 @@ export default {
       }).sort((a, b) => {
         return a.dueDateTs - b.dueDateTs
       })
+    },
+    filterByStatus (status) {
+      if (this.statusList.includes(status)) {
+        const invoiceAll = this.mapInvoices(getInvoices())
+        this.invoices = invoiceAll.filter((inv) => {
+          return inv.status === status
+        })
+      } else {
+        this.resetFilter()
+      }
+    },
+    resetFilter () {
+      this.invoices = this.mapInvoices(getInvoices())
     }
   }
 }
