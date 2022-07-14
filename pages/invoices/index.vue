@@ -40,7 +40,10 @@
         <div class="col-span-1">
           <div @click="showForm = !showForm" class="c__btn bg-primary-500 hover:bg-primary-600 flex items-center gap-1 md:gap-4">
             <IconPlusCircleSvg class="text-white h-10" />
-            <span class="text-sm font-bold">New <span class="hidden lg:block">Invoice</span></span>
+            <div>
+              <span class="lg:hidden text-sm font-bold">New </span>
+              <span class="hidden lg:block text-sm font-bold">New Invoice</span>
+            </div>
           </div>
         </div>
       </div>
