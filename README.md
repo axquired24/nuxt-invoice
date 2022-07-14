@@ -16,6 +16,7 @@
 ## Improve Feature
 - Added invoice status on the detail page
 - Added button for Save draft on the invoice form
+- Go to `/invoices?reset=1` to reset local storage database to initial state
 ## Running in Local Laptop
 
 ```bash
