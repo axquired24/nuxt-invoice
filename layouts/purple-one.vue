@@ -1,6 +1,6 @@
 <template>
   <div class="wrapper bg-primary-900 text-cgrey-a min-h-screen">
-    <Navbar />
+    <Navbar class="hidden lg:block" />
     <Nuxt />
   </div>
 </template>

@@ -1,18 +1,19 @@
 <!-- eslint-disable vue/multi-word-component-names -->
 <template>
   <div class="flex justify-center items-start pt-10">
-    <div class="w-1/2">
-      <div class="grid grid-cols-4 items-end">
+    <div class="w-full px-4 lg:w-1/2">
+      <div class="grid grid-cols-4 gap-4 items-end">
         <div class="col-span-2">
           <div class="text-3xl font-bold">
             Invoices
           </div>
-          <span>There are total {{ invoices.length }} Invoices</span>
+          <span class="hidden md:block">There are total {{ invoices.length }} Invoices</span>
+          <span class="md:hidden">{{ invoices.length }} Invoices</span>
         </div>
         <div class="col-span-1">
           <select
             v-model="statusFilter"
-            class="cursor-pointer capitalize bg-transparent px-2 py-3 font-semibold"
+            class="hidden md:block cursor-pointer capitalize bg-transparent px-2 py-3 font-semibold"
             @change="filterByStatus(statusFilter)">
             <option value="0" disabled>Filter by status</option>
             <option value="all">All</option>
@@ -22,15 +23,28 @@
               </option>
             </template>
           </select>
+
+          <select
+            v-model="statusFilter"
+            class="md:hidden cursor-pointer capitalize bg-transparent px-2 py-3 font-semibold"
+            @change="filterByStatus(statusFilter)">
+            <option value="0" disabled>Filter </option>
+            <option value="all">All</option>
+            <template v-for="(st, stIdx) in statusList">
+              <option :key="stIdx" :value="st">
+                {{ st }}
+              </option>
+            </template>
+          </select>
         </div>
         <div class="col-span-1">
-          <div @click="showForm = !showForm" class="c__btn bg-primary-500 hover:bg-primary-600 flex items-center gap-4">
+          <div @click="showForm = !showForm" class="c__btn bg-primary-500 hover:bg-primary-600 flex items-center gap-1 md:gap-4">
             <IconPlusCircleSvg class="text-white h-10" />
-            <span class="text-sm font-bold">New Invoice</span>
+            <span class="text-sm font-bold">New <span class="hidden lg:block">Invoice</span></span>
           </div>
         </div>
       </div>
-      <div class="invoice-list mt-10">
+      <div class="invoice-list my-10">
         <template v-for="inv in invoices">
           <div :key="inv.id">
             <InvoiceListCard :inv="inv" />

@@ -5,7 +5,7 @@
 
 ## Feature 
 - Uncheck feature is not finished yet
-- [ ] View the optimal layout for the app depending on their device's screen size
+- [~] View the optimal layout for the app depending on their device's screen size (Done only for invoice list page)
 - [x] See hover states for all interactive elements on the page
 - [x] Create, read, update, and delete invoices
 - [x] Receive form validations when trying to create/edit an invoice
