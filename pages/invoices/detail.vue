@@ -13,7 +13,7 @@
         </div>
         <div class="col-span-2 gap-2 flex justify-end items-center">
           <div class="c__btn bg-transparent text-cgrey-a hover:text-gray-400">
-            <span class="text-sm font-semibold">Edit</span>
+            <span @click="toggleForm(true)" class="text-sm font-semibold">Edit</span>
           </div>
           <div @click="deleteInvoice()" class="c__btn bg-red-700 hover:bg-red-800">
             <span class="text-sm font-semibold">Delete</span>
@@ -25,7 +25,7 @@
       </div>
       <!-- End section header -->
 
-      <div class="p-10 mt-10 bg-primary-800 rounded-md">
+      <div class="p-10 my-10 bg-primary-800 rounded-md">
         <div
           :class="statusClass"
           class="capitalize px-4 py-2 mb-4 flex justify-center gap-2 items-center rounded-md w-24"
@@ -49,6 +49,12 @@
         </div>
         <div class="mt-4 flex justify-between">
           <div>
+            <div class="text-sm">Invoice Date</div>
+            <div>{{ $moment(invoice?.date).format('DD MMM YYYY') }}</div>
+          </div>
+        </div>
+        <div class="mt-4 flex justify-between">
+          <div>
             <div class="text-sm">Due Date</div>
             <div>{{ getDueDate(invoice) }}</div>
           </div>
@@ -67,7 +73,7 @@
           <div>{{ invoice?.projectDescription }}</div>
         </div>
 
-        <div class="mt-10 bg-primary-600 p-4 rounded-tr-md rounded-tl-md">
+        <div class="mt-10 bg-primary-750 p-4 rounded-tr-md rounded-tl-md">
           <div class="grid grid-cols-5 text-xs text-right">
             <div class="col-span-2 text-left">ITEM NAME</div>
             <div>QTY</div>
@@ -79,8 +85,8 @@
             <div :key="itemIdx" class="grid grid-cols-5 my-2 text-right">
               <div class="col-span-2 text-left">{{ item.name }}</div>
               <div>{{ item.qty }}</div>
-              <div>￡ {{ item.price }}</div>
-              <div>￡ {{ Math.round((item.qty * item.price) * 100) / 100 }}</div>
+              <div>￡ {{ getNumeralFormat(item.price) }}</div>
+              <div>￡ {{ getSubTotalBill(item.qty, item.price) }}</div>
             </div>
           </template>
         </div>
@@ -90,11 +96,16 @@
       </div>
       <!-- End section body -->
     </div>
+
+    <template v-if="showForm">
+      <InvoiceForm :inv="invoice" :toggleform="toggleForm" :is-new="false" />
+    </template>
   </div>
 </template>
 
 <script>
 import DataStorage from '~/static/DataStorage'
+import { getEmptyInvoice } from '~/static/InvoiceData'
 const numeral = require('numeral')
 const dbLocal = new DataStorage()
 
@@ -102,11 +113,10 @@ export default {
   layout: 'purple-one',
   data () {
     return {
-      invoice: {
-        id: null
-      },
+      invoice: getEmptyInvoice(),
       totalBill: 0,
-      statusClass: null
+      statusClass: null,
+      showForm: false
     }
   },
   mounted () {
@@ -160,6 +170,14 @@ export default {
 
       return bg + ' ' + color
     },
+    getNumeralFormat (num) {
+      return numeral(num).format('0,0.00')
+    },
+    getSubTotalBill (qty, price) {
+      let total = price * qty
+      total = Math.round(total * 100) / 100
+      return numeral(total).format('0,0.00')
+    },
     setAsPaid () {
       const confirmation = confirm('Are you sure you want to mark this invoice as paid?')
       if (confirmation) {
@@ -178,6 +196,9 @@ export default {
         alert('Invoice deleted')
         this.$router.push({ path: '/invoices' })
       }
+    },
+    toggleForm (visible = false) {
+      this.showForm = visible
     }
   }
 }

@@ -50,4 +50,37 @@ function getInvoices () {
   ]
 }
 
+export function getEmptyInvoice () {
+  return {
+    id: null,
+    from: {
+      address: null,
+      city: null,
+      postalCode: null,
+      country: null
+    },
+    to: {
+      name: null,
+      email: null,
+      address: null,
+      city: null,
+      postalCode: null,
+      country: null
+    },
+    date: null,
+    dayTerms: 30,
+    projectDescription: null,
+    items: [],
+    status: 'draft'
+  }
+}
+
+export function getEmptyInvoiceItem () {
+  return {
+    name: '',
+    price: 1,
+    qty: 1
+  }
+}
+
 export default getInvoices

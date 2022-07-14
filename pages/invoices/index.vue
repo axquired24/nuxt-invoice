@@ -12,8 +12,8 @@
         <div class="col-span-1">
           <select
             v-model="statusFilter"
-            @change="filterByStatus(statusFilter)"
-            class="cursor-pointer capitalize bg-transparent px-2 py-3 font-semibold">
+            class="cursor-pointer capitalize bg-transparent px-2 py-3 font-semibold"
+            @change="filterByStatus(statusFilter)">
             <option value="0" disabled>Filter by status</option>
             <option value="all">All</option>
             <template v-for="(st, stIdx) in statusList">
@@ -24,7 +24,7 @@
           </select>
         </div>
         <div class="col-span-1">
-          <div class="c__btn bg-primary-500 hover:bg-primary-600 flex items-center gap-4">
+          <div @click="showForm = !showForm" class="c__btn bg-primary-500 hover:bg-primary-600 flex items-center gap-4">
             <IconPlusCircleSvg class="text-white h-10" />
             <span class="text-sm font-bold">New Invoice</span>
           </div>
@@ -38,11 +38,16 @@
         </template>
       </div>
     </div>
+
+    <template v-if="showForm">
+      <InvoiceForm :inv="newInvoice" :toggleform="toggleForm" :is-new="true" />
+    </template>
   </div>
 </template>
 
 <script>
 import DataStorage from '~/static/DataStorage'
+import { getEmptyInvoice } from '~/static/InvoiceData'
 const dbLocal = new DataStorage()
 
 export default {
@@ -52,7 +57,8 @@ export default {
       invoices: [],
       statusList: ['draft', 'pending', 'paid'],
       statusFilter: 0,
-      showForm: false
+      showForm: false,
+      newInvoice: getEmptyInvoice()
     }
   },
   mounted () {
@@ -90,6 +96,9 @@ export default {
       if (isForceClean) {
         dbLocal.forceClean()
       }
+    },
+    toggleForm (visible = false) {
+      this.showForm = visible
     }
   }
 }

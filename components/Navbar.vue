@@ -1,5 +1,5 @@
 <template>
-  <div class="fixed left-0 bg-primary-800 rounded-tr-2xl rounded-br-2xl">
+  <div class="fixed z-20 left-0 bg-primary-800 rounded-tr-2xl rounded-br-2xl">
     <div class="min-h-screen w-20 flex flex-col justify-between items-center">
       <div class="w-full h-16 rounded-xl bg-primary-500 flex items-center justify-center">
         <IconPieSvg class="transform -rotate-45 h-12" />
