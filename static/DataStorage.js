@@ -37,6 +37,12 @@ class DataStorage {
     this.commitLatestValue(latestValue)
   }
 
+  addNew (newInvoice) {
+    const latestValue = this.currentValue
+    latestValue.push(newInvoice)
+    this.commitLatestValue(latestValue)
+  }
+
   removeById (id) {
     const latestValue = this.currentValue
     const index = latestValue.findIndex(invoice => invoice.id === id)

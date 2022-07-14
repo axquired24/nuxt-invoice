@@ -12,55 +12,61 @@
         <div class="mt-10 text-sm font-semibold text-primary-500">Bill From</div>
         <div class="form-group mt-4">
           <label class="text-sm">Street Address</label>
-          <input v-model="form.from.address" type="text" class="form-control form-control-default">
+          <input v-model="form.from.address" type="text" class="form-control form-control-default" required>
         </div>
         <div class="grid grid-cols-3 gap-4 mt-4">
           <div class="form-group">
             <label class="text-sm">City</label>
-            <input v-model="form.from.city" type="text" class="form-control form-control-default">
+            <input v-model="form.from.city" type="text" class="form-control form-control-default" required>
           </div>
           <div class="form-group">
             <label class="text-sm">Post Code</label>
-            <input v-model="form.from.postalCode" type="text" class="form-control form-control-default">
+            <input v-model="form.from.postalCode" type="text" class="form-control form-control-default" required>
           </div>
           <div class="form-group">
             <label class="text-sm">Country</label>
-            <input v-model="form.from.country" type="text" class="form-control form-control-default">
+            <input v-model="form.from.country" type="text" class="form-control form-control-default" required>
           </div>
         </div>
 
         <div class="mt-10 text-sm font-semibold text-primary-500">Bill To</div>
         <div class="form-group mt-4">
           <label class="text-sm">Client's Name</label>
-          <input v-model="form.to.name" type="text" class="form-control form-control-default">
+          <input v-model="form.to.name" type="text" class="form-control form-control-default" required>
         </div>
         <div class="form-group mt-4">
           <label class="text-sm">Client's Email</label>
-          <input v-model="form.to.email" type="text" class="form-control form-control-default">
+          <input v-model="form.to.email" type="text" class="form-control form-control-default" required>
         </div>
         <div class="form-group mt-4">
           <label class="text-sm">Street Address</label>
-          <input v-model="form.to.address" type="text" class="form-control form-control-default">
+          <input v-model="form.to.address" type="text" class="form-control form-control-default" required>
         </div>
         <div class="grid grid-cols-3 gap-4 mt-4">
           <div class="form-group">
             <label class="text-sm">City</label>
-            <input v-model="form.to.city" type="text" class="form-control form-control-default">
+            <input v-model="form.to.city" type="text" class="form-control form-control-default" required>
           </div>
           <div class="form-group">
             <label class="text-sm">Post Code</label>
-            <input v-model="form.to.postalCode" type="text" class="form-control form-control-default">
+            <input v-model="form.to.postalCode" type="text" class="form-control form-control-default" required>
           </div>
           <div class="form-group">
             <label class="text-sm">Country</label>
-            <input v-model="form.to.country" type="text" class="form-control form-control-default">
+            <input v-model="form.to.country" type="text" class="form-control form-control-default" required>
           </div>
         </div>
 
         <div class="grid grid-cols-2 gap-4 mt-10">
           <div class="form-group">
             <label class="text-sm">Invoice Date</label>
-            <input v-model="form.date" type="date" class="picker form-control form-control-default">
+            <input
+              v-model="form.date"
+              type="date"
+              class="picker form-control"
+              :class="isnew ? 'form-control-default' : 'form-control-disabled'"
+              :readonly="!isnew"
+              required>
           </div>
           <div class="form-group">
             <label class="text-sm">Payment Terms</label>
@@ -72,7 +78,7 @@
 
         <div class="form-group mt-4">
           <label class="text-sm">Project Description</label>
-          <input v-model="form.projectDescription" type="text" class="form-control form-control-default">
+          <input v-model="form.projectDescription" type="text" class="form-control form-control-default" required>
         </div>
 
         <div class="font-bold text-gray-500 text-xl mt-10">Item List</div>
@@ -87,10 +93,10 @@
         <template v-for="(item, itemIdx) in form.items">
           <div :key="itemIdx" class="grid grid-cols-12 mt-2 gap-4 items-center">
             <div class="col-span-5">
-              <input v-model="item.name" type="text" class="form-control form-control-default">
+              <input v-model="item.name" type="text" class="form-control form-control-default" required>
             </div>
             <div class="col-span-2">
-              <input v-model="item.qty" type="number" step="1" class="form-control form-control-default">
+              <input v-model="item.qty" type="number" step="1" class="form-control form-control-default" required>
             </div>
             <div class="col-span-2">
               <input
@@ -100,6 +106,7 @@
                 min="0"
                 lang="en"
                 class="form-control form-control-default"
+                required
               >
             </div>
             <div class="col-span-2">{{ getSubTotalBill(item.qty, item.price) }}</div>
@@ -115,6 +122,7 @@
 
         <div class="flex justify-end gap-2 text-white text-sm my-10">
           <button type="button" @click="closeForm()" class="c__btn bg-primary-800 hover:bg-primary-750">Cancel</button>
+          <button type="button" @click="submitForm(true)" class="c__btn bg-primary-800 hover:bg-primary-750">Save Draft</button>
           <button type="submit" class="c__btn bg-primary-500 hover:bg-primary-600">Save Changes</button>
         </div>
       </form>
@@ -125,12 +133,14 @@
 <script>
 import { customAlphabet } from 'nanoid'
 import { getEmptyInvoice, getEmptyInvoiceItem } from '~/static/InvoiceData'
+import DataStorage from '~/static/DataStorage'
+const dbLocal = new DataStorage()
 
 const numeral = require('numeral')
 
 export default {
   // eslint-disable-next-line vue/require-prop-types
-  props: ['inv', 'toggleform', 'isnew'],
+  props: ['inv', 'toggleform', 'isnew', 'aftersubmit'],
   data: () => {
     return {
       form: getEmptyInvoice(),
@@ -151,8 +161,23 @@ export default {
         this.form.id = customNano()
       } // endif
     },
-    submitForm () {
-      // TODO: submit form
+    submitForm (asDraft = false) {
+      dbLocal.getLatestValue()
+      if (this.isnew) {
+        if (asDraft) {
+          this.form.status = 'draft'
+        } else {
+          this.form.status = 'pending'
+        } // endif
+        dbLocal.addNew(this.cleanObject(this.form))
+      } else {
+        dbLocal.updateById(this.form.id, this.cleanObject(this.form))
+      } // endif
+      alert('Form submitted!')
+      this.aftersubmit()
+    },
+    cleanObject (obj) {
+      return JSON.parse(JSON.stringify(obj))
     },
     closeForm () {
       const confirmation = confirm('Are you sure you want to close this form? Your edit will be lost.')
@@ -223,8 +248,11 @@ input.picker[type="date"]::-webkit-calendar-picker-indicator {
   @apply block w-full px-3 py-2 transition duration-100 ease-in-out border rounded shadow-sm focus:ring-2 focus:ring-blue-500 focus:outline-none focus:ring-opacity-50
 }
 .form-control-default {
-    @apply text-white placeholder-gray-600 bg-primary-800 border-primary-750 focus:border-primary-500
-  }
+  @apply text-white placeholder-gray-600 bg-primary-800 border-primary-750 focus:border-primary-500
+}
+.form-control-disabled {
+  @apply text-gray-500 placeholder-gray-600 bg-primary-800 border-primary-750
+}
 .form-control-danger {
   @apply border-red-300 bg-red-50 placeholder-red-200 text-red-900
 }

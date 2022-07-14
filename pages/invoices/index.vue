@@ -40,7 +40,12 @@
     </div>
 
     <template v-if="showForm">
-      <InvoiceForm :inv="newInvoice" :toggleform="toggleForm" :is-new="true" />
+      <InvoiceForm
+        :inv="newInvoice"
+        :toggleform="toggleForm"
+        :isnew="true"
+        :aftersubmit="afterSubmitForm"
+      />
     </template>
   </div>
 </template>
@@ -99,6 +104,9 @@ export default {
     },
     toggleForm (visible = false) {
       this.showForm = visible
+    },
+    afterSubmitForm () {
+      window.location.reload()
     }
   }
 }

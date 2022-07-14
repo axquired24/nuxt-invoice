@@ -50,7 +50,17 @@ function getInvoices () {
   ]
 }
 
+export function getEmptyInvoiceItem () {
+  return {
+    name: '',
+    price: 1,
+    qty: 1
+  }
+}
+
 export function getEmptyInvoice () {
+  const initItems = []
+  initItems.push(getEmptyInvoiceItem())
   return {
     id: null,
     from: {
@@ -70,16 +80,8 @@ export function getEmptyInvoice () {
     date: null,
     dayTerms: 30,
     projectDescription: null,
-    items: [],
+    items: initItems,
     status: 'draft'
-  }
-}
-
-export function getEmptyInvoiceItem () {
-  return {
-    name: '',
-    price: 1,
-    qty: 1
   }
 }
 
